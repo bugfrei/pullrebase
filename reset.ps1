@@ -34,7 +34,7 @@ function WAsk {
     }
 }
 
-Remove-Item * -Exclude reset.ps1
+Remove-Item * -Exclude reset.ps1 -Recurse -Force
 Remove-Item .git -Recurse -Force
 
 Set-Content file1.js "console.log(`"Teil 1 des Projektes`");
