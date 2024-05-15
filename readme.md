@@ -101,3 +101,51 @@ Dann sind alle Änderungen im Repo und werden vereint in ein Konflikt Commit.
 Dies bläht das Log noch mehr auf.
 
 Daher immer `git pull --rebase` verwenden.
+
+# Konfiguration von Git
+
+Man kann git konfigurieren, das es automatisch `git pull` mit merge oder rebase verwendet, falls es störende Commits im Remote-Repo gibt.
+
+**Entweder einzelln für das Repository:**
+
+Kein Rebase verwenden, Standardverfahren bei störenden Commits ist Merge:
+`git config pull.rebase false`
+
+Rebase verwenden bei störenden Commits:
+`git config pull.rebase true`
+
+Nur Fast-Forward * verwenden:
+`git config pull.ff only`
+
+**Oder global für alle Repositories:**
+```
+git config --global pull.rebase false
+git config --global pull.rebase true
+git config --global pull.ff only
+```
+(jeweils eine Option wählen)
+
+**Manuell, einmalig je git pull Verwendung:**
+
+```
+git pull ... --rebase
+git pull ... --no-rebase
+git pull ... --ff-only
+```
+
+\* Fast-Forward bedeutet, das wenn nur das Remote Repo (oder ein anderer Branch beim Merge) neue Commits hat, das lokale Repo bzw. der aktuelle Branch keine. Dann bedarf es keinem Rebase oder Merge da diese Commits einfach hinten angehängt werden.
+
+```
+Aus                          Wird
+* C2-Remote/Branch 2         * C4 (ehemals C2-R/B2)
+* C1-Remote/Branch 2         * C3 (ehemals C1-R/B2)
+ \                           * C2 (ehemals C2-L/B1)
+  \                          * C1 (ehemals C1-L/B1)
+   * C2-Lokal/Branch 1
+   * C1-Lokal/Branch 1
+```
+
+Es bedarf hier weder ein Merge, noch ein Rebase oder sonnst was. Die neuen Commits (von Remote oder anderem Brach) werde einfach in den aktuellen Branch "verschoben"
+
+
+
